@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Declaración de un archivo XML con la versión y codificación -->
+
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!-- Declaración del tipo de documento (DTD) para la configuración de Hibernate -->
+
+<hibernate-configuration>
+    <!-- Inicio de la configuración de Hibernate -->
+
+    <session-factory>
+        <!-- Configuración de la fábrica de sesiones -->
+
+        <!-- Configuración de la conexión a la base de datos MySQL -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/dentilax</property>
+        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">1234</property>
+        <property name="connection.pool_size">3</property>
+
+        <!-- Configuración de la gestión de sesiones -->
+        <property name="current_session_context_class">thread</property>
+        <!-- Configuración de la visualización de consultas SQL -->
+        <property name="show_sql">false</property>
+        <!-- Configuración del formato de consultas SQL -->
+        <property name="format_sql">true</property>
+        <!-- Configuración de la actualización automática del esquema de la base de datos -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- Mapeo de clases Java a tablas de la base de datos -->
+        <mapping class="actividad_Hibernate.Paciente" />
+        <mapping class="actividad_Hibernate.Usuario" />
+        <mapping class="actividad_Hibernate.Tratamiento" />
+
+    </session-factory>
+
+</hibernate-configuration>
