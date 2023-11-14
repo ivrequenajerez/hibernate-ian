@@ -1,12 +1,20 @@
 package actividad_Hibernate;
 
 import java.io.Serializable;
+import java.util.Set; // Asegúrate de que estás importando la clase Set correcta
+import java.util.HashSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.Session;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "paciente")
@@ -31,6 +39,11 @@ public class Paciente implements Serializable {
 
 	@Column(name = "ultimaConsulta")
 	private java.sql.Date ultimaConsulta;
+	
+	// RELACIÓN
+	@OneToMany(mappedBy = "paciente")
+	@Cascade(value = CascadeType.ALL)
+	private Set<Cita> citas = new HashSet<>();
 
 	public Paciente() {
 	}
@@ -96,6 +109,43 @@ public class Paciente implements Serializable {
 	public void setUltimaConsulta(java.sql.Date ultimaConsulta) {
 		this.ultimaConsulta = ultimaConsulta;
 	}
+	
+	public Set<Cita> getCitas() {
+	    return citas;
+	}
 
 	// Resto de los métodos hashCode, equals, toString
+	
+	public void addCita(Cita cita, Session session) {
+	    if (citas == null) {
+	        citas = new HashSet<>();
+	    }
+	    citas.add(cita);
+	    cita.setPaciente(this);
+	    
+	    try {
+	        session.beginTransaction();
+	        session.save(cita);
+	        session.getTransaction().commit();
+	        System.out.println("Cita añadida y guardada exitosamente en la base de datos.");
+	    } catch (Exception e) {
+	        System.err.println("Error al guardar la cita en la base de datos. Error: " + e.getMessage());
+	        if (session.getTransaction() != null && session.getTransaction().isActive()) {
+	            session.getTransaction().rollback();
+	        }
+	    }
+	}
+
+	
+	@Override
+	public String toString() {
+	    return String.format(
+	            "ID: %d\nNombre: %s %s\nDirección: %s\nTeléfono: %s\nÚltima Consulta: %s",
+	            idPaciente, nombre, apellidos, dirección, teléfono, ultimaConsulta
+	    );
+	}
+	
+	
+
+	
 }

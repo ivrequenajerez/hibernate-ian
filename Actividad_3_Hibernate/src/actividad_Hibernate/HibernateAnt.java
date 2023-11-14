@@ -4,8 +4,13 @@
  */
 package actividad_Hibernate;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
@@ -18,7 +23,7 @@ import org.hibernate.cfg.Configuration;
 
 /**
  *
- * @author Usuario
+ * @author Ian
  */
 public class HibernateAnt {
 
@@ -27,12 +32,14 @@ public class HibernateAnt {
 	 */
 	public static void main(String[] argas) {
 		try {
+			
 			// SessionFactory instancia = (SessionFactory)
 			// HibernateUtil.buildSessionFactory();
 			// Sesiones. Factory crea la sesión conforme al fichero de configuración de
 			// hibernate
 			// Añadimos tantas clases como utilicemos con addAnnotatedClass
 			// Session. Crea la sesión de conexión a la base de datos
+			
 			SessionFactory instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 					.addAnnotatedClass(Paciente.class).buildSessionFactory();
 			Session session = instancia.openSession();
@@ -40,54 +47,138 @@ public class HibernateAnt {
 			Query<Paciente> query = session.createQuery("FROM Paciente", Paciente.class);
 			List<Paciente> pacientes = query.getResultList();
 
-			System.out.println("Número de pacientes: " + pacientes.size());
+			// System.out.println("Número de pacientes: " + pacientes.size());
 
-			for (Paciente paciente : pacientes) {
+			/*for (Paciente paciente : pacientes) {
 				System.out.println(paciente);
-			}
+			}*/
 
 			// Operaciones CRUD
-			// Inserción
-			insertarPaciente(instancia, new Paciente("NombrePaciente", "ApellidoPaciente", "123456789"));
-
-			// Actualización
-			actualizarPaciente(instancia, 1, "NuevoNombre", "NuevoApellido", "987654321");
-
-			// Borrado
-			borrarPaciente(instancia, 2);
-
-			// Consulta
-			consultarPacientes(instancia);
-
+			Scanner scanner = new Scanner(System.in);
+			
 			/*
-			 * //Creamos objetos. No pasamos un id lo recupera hibernate Customer c = new
-			 * Customer("Antonio","Lopez",500);
-			 * 
-			 * //Transacciones. Insertamos/Guardamos objeto en la tabla
-			 * session.beginTransaction(); session.save(c);
-			 * 
-			 * //Actualizamos un objeto con update. Tenemos que incluir id Customer c2 = new
-			 * Customer(2,"UPDATE","UPDATE",300); session.update(c2);
-			 * 
-			 * //Eliminamos el objecto c3. Elimina en base al id Customer c3 = new
-			 * Customer("Pepe","Perez",300); session.save(c3); //Podemos borrar solo con el
-			 * id del objeto (setID) session.delete(c3);
-			 * 
-			 * session.getTransaction().commit(); //También permite rollback()
-			 * System.out.println("Registro insertado/actualizado/borrado");
-			 * 
-			 * //------ HQL -------- //Consulta 1 String hql = "FROM Customer";
-			 * Query<Customer> consulta = session.createQuery(hql,Customer.class);
-			 * List<Customer> results = consulta.getResultList(); for(Customer cust :
-			 * results){ System.out.println(cust); }
-			 * 
-			 * //Consulta 2 //String hql = "FROM Customer WHERE id=:id"; Query<Customer>
-			 * consulta2 = session.createQuery("FROM Customer WHERE id=:id",Customer.class);
-			 * consulta2.setParameter("id",1); Customer customer =
-			 * consulta2.getSingleResult(); List<Customer> results2 =
-			 * consulta2.getResultList(); System.out.println(customer); //try .. catch
-			 * (NoResultException e)
-			 */
+			// Inserción
+			// Solicitar datos del paciente por teclado
+			System.out.print("Ingrese el nombre del paciente: ");
+			String nombre = scanner.nextLine();
+
+			System.out.print("Ingrese el apellido del paciente: ");
+			String apellido = scanner.nextLine();
+
+			System.out.print("Ingrese la dirección del paciente: ");
+			String direccion = scanner.nextLine();
+
+			System.out.print("Ingrese el número de teléfono del paciente: ");
+			String telefono = scanner.nextLine();
+
+			System.out.print("Ingrese la fecha de nacimiento del paciente (yyyy-MM-dd): ");
+			String fechaNacimientoStr = scanner.nextLine();
+
+			// Convertir la cadena de fecha a java.sql.Date
+			Date fechaNacimiento = convertirAFechaSQL(fechaNacimientoStr);
+
+			// Crear objeto Paciente con los datos proporcionados
+			Paciente paciente = new Paciente(nombre, apellido, direccion, telefono, fechaNacimiento);
+
+			// Solicitar el ID del paciente por teclado
+			System.out.print("Ingrese el ID del paciente: ");
+			int idPaciente = scanner.nextInt();
+			paciente.setIdPaciente(idPaciente);
+
+			// Insertar el paciente en la base de datos
+			insertarPaciente(instancia, paciente);
+			*/
+			
+			/*
+			// ACTUALIZAR
+			// Solicitar ID del paciente a actualizar por teclado
+            System.out.print("Ingrese el ID del paciente a actualizar: ");
+            int idPacienteActualizar = scanner.nextInt();
+
+            // Consultar y mostrar información actual del paciente
+            Paciente pacienteActual = consultarPaciente(instancia, idPacienteActualizar);
+            System.out.println("Información actual del paciente:");
+            System.out.println(pacienteActual);
+			
+            // Solicitar nuevos datos del paciente por teclado
+            System.out.print("Ingrese el nuevo nombre del paciente: ");
+            scanner.nextLine();  // Consumir el salto de línea pendiente
+            String nuevoNombre = scanner.nextLine();
+
+            System.out.print("Ingrese el nuevo apellido del paciente: ");
+            String nuevoApellido = scanner.nextLine();
+
+            System.out.print("Ingrese la nueva dirección del paciente: ");
+            String nuevaDireccion = scanner.nextLine();
+
+            System.out.print("Ingrese el nuevo número de teléfono del paciente: ");
+            String nuevoTelefono = scanner.nextLine();
+
+            System.out.print("Ingrese la fecha de nacimiento del paciente (yyyy-MM-dd): ");
+			String nuevaFechaNacimientoStr = scanner.nextLine();
+
+			// Convertir la cadena de fecha a java.sql.Date
+			Date nuevaFechaNacimiento = convertirAFechaSQL(nuevaFechaNacimientoStr);
+			
+            // Crear objeto Paciente con los nuevos datos
+            Paciente pacienteActualizado = new Paciente(nuevoNombre, nuevoApellido, nuevaDireccion, nuevoTelefono, nuevaFechaNacimiento);
+            pacienteActualizado.setIdPaciente(idPacienteActualizar);
+
+            // Actualizar el paciente en la base de datos
+            actualizarPaciente(instancia, pacienteActualizado);
+			*/
+			
+			/*
+			// BORRAR
+            // Solicitar ID del paciente a borrar por teclado
+            System.out.print("Ingrese el ID del paciente a borrar: ");
+            int idPacienteBorrar = scanner.nextInt();
+
+            // Borrar el paciente en la base de datos
+            borrarPaciente(instancia, idPacienteBorrar);
+			*/
+			
+			// CONSULTA
+	        // Solicitar el ID del paciente por teclado
+	        System.out.print("Ingrese el ID del paciente a consultar: ");
+	        int idPaciente = scanner.nextInt();
+
+	        // Consultar el paciente en la base de datos
+	        Paciente pacienteConsultado = consultarUnPaciente(instancia, idPaciente);
+
+	        if (pacienteConsultado != null) {
+	            //System.out.println("Paciente consultado: " + pacienteConsultado);
+
+	        	// Solicitar los datos para la creación de una nueva cita por teclado
+	        	System.out.println("Ingrese la fecha de la cita (formato: YYYY-MM-DD): ");
+	        	String fechaCitaString = scanner.next();
+	        	Date fechaCita = convertirAFechaSQL(fechaCitaString);
+
+	        	System.out.println("Ingrese la hora de la cita: ");
+	        	String horaCita = scanner.next();
+
+	        	System.out.println("Ingrese el motivo de la cita: ");
+	        	String motivoCita = scanner.next();
+
+	        	System.out.println("Ingrese el ID del doctor: ");
+	        	String idDoctor = scanner.next();
+
+	        	// Crear una instancia de Cita con los datos ingresados
+	        	Cita cita = new Cita(fechaCita, horaCita, motivoCita, pacienteConsultado, idDoctor);
+
+	        	// Agregar la cita al paciente (si ya tiene citas, se añadirá a la colección existente)
+	        	pacienteConsultado.addCita(cita, session);
+
+	        	// Imprimir información para verificar que la cita se ha agregado correctamente al paciente
+	        	//System.out.println("Paciente después de agregar la cita: " + pacienteConsultado);
+	        	System.out.println("Citas del Paciente: " + pacienteConsultado.getCitas());
+
+	            // Imprimir información para verificar que la cita se ha agregado correctamente al paciente
+	            // System.out.println("Paciente después de agregar la cita: " + pacienteConsultado);
+	            System.out.println("Citas del Paciente: " + pacienteConsultado.getCitas());
+	        } else {
+	            System.out.println("No se encontró un paciente con el ID proporcionado.");
+	        }
 
 			session.close();
 		} catch (HibernateException he) {
@@ -101,84 +192,92 @@ public class HibernateAnt {
 		}
 
 	}
+
+	// Funciones-Métodos
+
+	private static void insertarPaciente(SessionFactory sessionFactory, Paciente paciente) {
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			session.save(paciente);
+			session.getTransaction().commit();
+			System.out.println("Paciente insertado exitosamente.");
+		} catch (Exception e) {
+			System.err.println("No se puede insertar el paciente. Error: " + e.getMessage());
+		}
+	}
 	
-	// Métodos
+	private static void actualizarPaciente(SessionFactory sessionFactory, Paciente paciente) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(paciente);
+            session.getTransaction().commit();
+            System.out.println("Paciente actualizado exitosamente.");
+        } catch (Exception e) {
+            System.err.println("No se puede actualizar el paciente. Error: " + e.getMessage());
+        }
+    }
 	
-	private static void insertarPaciente(SessionFactory sessionFactory, Paciente paciente) throws IllegalStateException, SystemException {
-        Transaction transaction = null;
-
+	private static Paciente consultarPaciente(SessionFactory sessionFactory, int idPaciente) {
         try (Session session = sessionFactory.openSession()) {
-            transaction = (Transaction) session.beginTransaction();
-            session.save(paciente);
-            transaction.commit();
-            System.out.println("Paciente insertado: " + paciente);
+            return session.get(Paciente.class, idPaciente);
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            System.err.println("Error al consultar el paciente. Error: " + e.getMessage());
+            return null;
         }
     }
 
-    private static void actualizarPaciente(SessionFactory sessionFactory, int pacienteId, String nuevoNombre, String nuevoApellido, String nuevoTelefono) throws IllegalStateException, SystemException {
-        Transaction transaction = null;
+	private static void borrarPaciente(SessionFactory sessionFactory, int idPaciente) {
+	    try (Session session = sessionFactory.openSession()) {
+	        session.beginTransaction();
 
-        try (Session session = sessionFactory.openSession()) {
-            transaction = (Transaction) session.beginTransaction();
-            Paciente paciente = session.get(Paciente.class, pacienteId);
+	        // Obtener el paciente por ID
+	        Paciente paciente = session.get(Paciente.class, idPaciente);
 
-            if (paciente != null) {
-                paciente.setNombre(nuevoNombre);
-                paciente.setApellidos(nuevoApellido);
-                paciente.setTeléfono(nuevoTelefono);
-                session.update(paciente);
-                transaction.commit();
-                System.out.println("Paciente actualizado: " + paciente);
-            } else {
-                System.out.println("No se encontró el paciente con ID: " + pacienteId);
-            }
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
+	        if (paciente != null) {
+	            // Borrar el paciente si existe
+	            session.delete(paciente);
+	            session.getTransaction().commit();
+	            System.out.println("Paciente borrado exitosamente.");
+	        } else {
+	            System.out.println("No se encontró un paciente con el ID proporcionado.");
+	        }
+	    } catch (Exception e) {
+	        System.err.println("No se puede borrar el paciente. Error: " + e.getMessage());
+	    }
+	}
+
+	private static Paciente consultarUnPaciente(SessionFactory sessionFactory, int idPaciente) {
+	    Paciente paciente = null;
+	    try (Session session = sessionFactory.openSession()) {
+	        session.beginTransaction();
+	        paciente = session.get(Paciente.class, idPaciente);
+
+	        // Forzar la carga de la colección antes de cerrar la sesión
+	        if (paciente != null) {
+	            paciente.getCitas().size();
+	        }
+
+	        session.getTransaction().commit();
+
+	        if (paciente != null) {
+	            System.out.println("Paciente consultado exitosamente: ");
+	            System.out.println(paciente);
+	        } else {
+	            System.out.println("Paciente no encontrado con ID: " + idPaciente);
+	        }
+	    } catch (Exception e) {
+	        System.err.println("Error al consultar el paciente. Error: " + e.getMessage());
+	    }
+	    return paciente;
+	}
+
+	
+
+	private static Date convertirAFechaSQL(String fechaStr) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date fechaUtil = sdf.parse(fechaStr);
+        return new Date(fechaUtil.getTime());
     }
 
-    private static void borrarPaciente(SessionFactory sessionFactory, int pacienteId) throws IllegalStateException, SystemException {
-        Transaction transaction = null;
-
-        try (Session session = sessionFactory.openSession()) {
-            transaction = (Transaction) session.beginTransaction();
-            Paciente paciente = session.get(Paciente.class, pacienteId);
-
-            if (paciente != null) {
-                session.delete(paciente);
-                transaction.commit();
-                System.out.println("Paciente borrado: " + paciente);
-            } else {
-                System.out.println("No se encontró el paciente con ID: " + pacienteId);
-            }
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    private static void consultarPacientes(SessionFactory sessionFactory) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Paciente> query = session.createQuery("FROM Paciente", Paciente.class);
-            List<Paciente> pacientes = query.getResultList();
-
-            System.out.println("Listado de Pacientes:");
-            for (Paciente paciente : pacientes) {
-                System.out.println(paciente);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 }

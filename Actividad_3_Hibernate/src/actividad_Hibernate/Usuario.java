@@ -69,11 +69,11 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", nombre='" + nombre + '\'' +
-                ", contraseña='" + contraseña + '\'' +
-                ", rol='" + rol + '\'' +
-                '}';
+        return String.format(
+                "ID Usuario: %d\nNombre: %s\nContraseña: %s\nRol: %s",
+                idUsuario, nombre, contraseña, rol
+        );
     }
+
+    
 }

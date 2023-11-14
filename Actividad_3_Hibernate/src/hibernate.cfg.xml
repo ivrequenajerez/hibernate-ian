@@ -29,8 +29,13 @@
 
         <!-- Mapeo de clases Java a tablas de la base de datos -->
         <mapping class="actividad_Hibernate.Paciente" />
+        <mapping class="actividad_Hibernate.Cita" />
         <mapping class="actividad_Hibernate.Usuario" />
         <mapping class="actividad_Hibernate.Tratamiento" />
+        <mapping class="actividad_Hibernate.Stock" />
+        <mapping class="actividad_Hibernate.Proveedor" />
+        <mapping class="actividad_Hibernate.Doctor" />
+        <mapping class="actividad_Hibernate.Especialidad" />
 
     </session-factory>
 

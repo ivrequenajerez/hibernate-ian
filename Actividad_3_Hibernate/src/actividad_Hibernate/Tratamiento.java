@@ -86,6 +86,10 @@ public class Tratamiento implements Serializable {
 
     @Override
     public String toString() {
-        return "Tratamiento{" + "idTratamiento=" + idTratamiento + ", coste=" + coste + ", nombre=" + nombre + ", cita_idCita=" + cita_idCita + '}';
+        return String.format(
+                "Tratamiento:\nID: %d\nCoste: %f\nNombre: %s\nCita ID: %d",
+                idTratamiento, coste, nombre, cita_idCita
+        );
     }
+
 }
