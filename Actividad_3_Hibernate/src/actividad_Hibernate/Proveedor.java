@@ -12,32 +12,41 @@ import javax.persistence.Table;
 @Table(name = "proveedor")
 public class Proveedor implements Serializable {
 
+    // Identificador único del proveedor
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProveedor")
     private Integer idProveedor;
 
+    // Nombre del proveedor, no puede ser nulo
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
+    // Teléfono del proveedor
     @Column(name = "telefono", nullable = false)
     private int telefono;
 
+    // Correo del proveedor, no puede ser nulo
     @Column(name = "correo", nullable = false)
     private String correo;
 
+    // Dirección del proveedor, no puede ser nula
     @Column(name = "direccion", nullable = false)
     private String direccion;
 
+    // Constructor por defecto
     public Proveedor() {
     }
 
+    // Constructor con parámetros para inicializar el proveedor
     public Proveedor(String nombre, int telefono, String correo, String direccion) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.correo = correo;
         this.direccion = direccion;
     }
+
+    // Métodos getter y setter para cada atributo
 
     public Integer getIdProveedor() {
         return idProveedor;
@@ -79,6 +88,7 @@ public class Proveedor implements Serializable {
         this.direccion = direccion;
     }
 
+    // Representación en formato de cadena del proveedor
     @Override
     public String toString() {
         return String.format(

@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -15,48 +14,58 @@ import javax.persistence.Table;
 @Table(name = "doctor")
 public class Doctor implements Serializable {
 
+    // Identificador único del doctor
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idDoctor")
     private Integer idDoctor;
 
+    // Nombre del doctor
     @Column(name = "nombre")
     private String nombre;
 
+    // Apellidos del doctor
     @Column(name = "apellidos")
     private String apellidos;
 
-    @Column(name = "teléfono")
-    private String teléfono;
+    // Teléfono del doctor
+    @Column(name = "telefono")
+    private String telefono;
 
-    @Column(name = "dirección")
-    private String dirección;
+    // Dirección del doctor
+    @Column(name = "direccion")
+    private String direccion;
 
-    // RELACIÓN
+    // RELACIÓN: Uno a uno con Especialidad
     @OneToOne
     @JoinColumn(name = "idEspecialidad_FK", nullable = false)
     private Especialidad especialidad;
 
+    // Salario del doctor
     @Column(name = "salario")
     private Integer salario;
 
+    // Correo electrónico del doctor
     @Column(name = "email")
     private String email;
 
+    // Constructor por defecto
     public Doctor() {
     }
 
-    public Doctor(String nombre, String apellidos, String teléfono, String dirección,
+    // Constructor con parámetros para inicializar el doctor
+    public Doctor(String nombre, String apellidos, String telefono, String direccion,
                   Especialidad especialidad, Integer salario, String email) {
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.teléfono = teléfono;
-        this.dirección = dirección;
+        this.telefono = telefono;
+        this.direccion = direccion;
         this.especialidad = especialidad;
         this.salario = salario;
         this.email = email;
     }
 
+    // Getter y Setter para idDoctor
     public Integer getIdDoctor() {
         return idDoctor;
     }
@@ -64,6 +73,8 @@ public class Doctor implements Serializable {
     public void setIdDoctor(Integer idDoctor) {
         this.idDoctor = idDoctor;
     }
+
+    // Métodos getter y setter para cada atributo
 
     public String getNombre() {
         return nombre;
@@ -81,20 +92,20 @@ public class Doctor implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public String getTeléfono() {
-        return teléfono;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setTeléfono(String teléfono) {
-        this.teléfono = teléfono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
-    public String getDirección() {
-        return dirección;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirección(String dirección) {
-        this.dirección = dirección;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public Especialidad getEspecialidad() {
@@ -121,11 +132,17 @@ public class Doctor implements Serializable {
         this.email = email;
     }
 
+    // Representación en formato de cadena del doctor
     @Override
     public String toString() {
         return String.format(
                 "ID Doctor: %d\nNombre: %s %s\nTeléfono: %s\nDirección: %s\nEspecialidad: %s\nSalario: %d\nEmail: %s",
-                idDoctor, nombre, apellidos, teléfono, dirección, especialidad.getTipo(), salario, email
+                idDoctor, nombre, apellidos, telefono, direccion, especialidad.getTipo(), salario, email
         );
+    }
+
+    // Método para establecer el ID del doctor
+    public void setIdDoctor(int idDoctor) {
+        this.idDoctor = idDoctor;
     }
 }

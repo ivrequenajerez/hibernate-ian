@@ -12,28 +12,36 @@ import javax.persistence.Table;
 @Table(name = "usuario")
 public class Usuario implements Serializable {
 
+    // Identificador único del usuario
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUsuario")
     private Integer idUsuario;
 
+    // Nombre del usuario
     @Column(name = "Nombre")
     private String nombre;
 
+    // Contraseña del usuario
     @Column(name = "contraseña")
     private String contraseña;
 
+    // Rol del usuario
     @Column(name = "rol")
     private String rol;
 
+    // Constructor por defecto
     public Usuario() {
     }
 
+    // Constructor con parámetros para inicializar el usuario
     public Usuario(String nombre, String contraseña, String rol) {
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.rol = rol;
     }
+
+    // Métodos getter y setter para cada atributo
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -67,6 +75,7 @@ public class Usuario implements Serializable {
         this.rol = rol;
     }
 
+    // Representación en formato de cadena del usuario
     @Override
     public String toString() {
         return String.format(
@@ -74,6 +83,4 @@ public class Usuario implements Serializable {
                 idUsuario, nombre, contraseña, rol
         );
     }
-
-    
 }
