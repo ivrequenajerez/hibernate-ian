@@ -69,6 +69,45 @@ public class Paciente implements Serializable {
     public Set<Cita> getCitas() {
         return citas;
     }
+    
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public String getApellidos() {
+    	return this.apellidos;
+    }
+    
+    public String getTeléfono() {
+        return teléfono;
+    }
+
+    public String getDirección() {
+        return dirección;
+    }
+
+    public java.sql.Date getUltimaConsulta() {
+        return ultimaConsulta;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public void setDirección(String dirección) {
+        this.dirección = dirección;
+    }
+
+    public void setTeléfono(String teléfono) {
+        this.teléfono = teléfono;
+    }
+
+    public void setUltimaConsulta(java.sql.Date ultimaConsulta) {
+        this.ultimaConsulta = ultimaConsulta;
+    }
 
     // Método para añadir una cita al conjunto de citas del paciente
     public void addCita(Cita cita, Session session) {
