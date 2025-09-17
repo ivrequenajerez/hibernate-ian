@@ -6,7 +6,7 @@ Forma parte de mi experiencia práctica en modelado de bases de datos y uso de O
 ---
 
 ## 🚀 Tecnologías utilizadas
-- **Java 11+**  
+- **Java**  
 - **Hibernate / JPA**  
 - **PostgreSQL** (configurable, adaptable a Oracle)  
 - **Maven**  
